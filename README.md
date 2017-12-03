@@ -1,1 +1,2 @@
-# machine_learning_from_scratch
+# Machine learning from scratch
+This repository implements machine learning algorithms from scratch for learning purposes.
