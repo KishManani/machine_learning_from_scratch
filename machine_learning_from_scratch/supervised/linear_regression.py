@@ -26,8 +26,6 @@ class Regression(object):
             self.gradient_descent(X, y, epochs=100, learning_rate=0.001)
         return None
 
-        return None
-
     def gradient_descent(self,X,y,epochs,learning_rate):
         num_feats = X.shape[1]
         num_samples = X.shape[0]
