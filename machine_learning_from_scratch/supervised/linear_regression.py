@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-
 
 class Regression(object):
     """
@@ -16,46 +14,55 @@ class Regression(object):
             self.weights))
         return np.dot(self.weights.T, x)
 
-    def fit(self, X, y, method='OLS'):
+    def fit(self, X, y, method='OLS', epochs=None, learning_rate=None, batch_size=None):
         if method == 'OLS':
             X = np.insert(X, 0, values=1, axis=1)  # Add a column of ones to the start
             ols = np.dot(np.linalg.inv(np.dot(X.T, X)), np.dot(X.T, y))
             self.weights = ols
         elif method == 'SGD':
             X = np.insert(X, 0, values=1, axis=1)  # Add a column of ones to the start
-            self.gradient_descent(X, y, epochs=100, learning_rate=0.001)
+            self.stochastic_gradient_descent(X, y, epochs=epochs, learning_rate=learning_rate, batch_size=batch_size)
         return None
 
-    def gradient_descent(self,X,y,epochs,learning_rate):
+    def gradient_descent(self, X, y, epochs, learning_rate, batch_size=None):
         num_feats = X.shape[1]
         num_samples = X.shape[0]
 
         y = y.reshape(num_samples, 1)
         w = np.random.rand(num_feats, 1)
-
         training_loss_epochs = []
+
         for ix in range(epochs):
-            y_pred = np.dot(X, w)
-            err = (y - y_pred)
-            dw = np.dot(-X.T, err) / num_samples
-            w -= learning_rate * dw
-            training_loss = 0.5 * (1 / num_samples) * np.dot(err.T, err)
+            if batch_size:
+                for batch_ix in np.arange(0, X.shape[0], batch_size):
+                    w = self.gradient_descent_step(w, X[batch_ix:batch_ix+batch_size], y[batch_ix:batch_ix+batch_size],
+                                                   learning_rate)
+            else:
+                    w = self.gradient_descent_step(w, X, y, learning_rate)
+            training_loss = 0.5 * (1 / num_samples) * np.dot((y-np.dot(X,w)).T, (y-np.dot(X,w)))
             if ix % 10 == 0:
                 print('epoch {0} : training loss {1}'.format(ix, training_loss))
             training_loss_epochs.append(training_loss[0])
+
         self.weights = w
         return None
+
+    def gradient_descent_step(self, w, X, y, learning_rate):
+        y_pred = np.dot(X, w)
+        err = (y - y_pred)
+        dw = np.dot(-X.T, err) / len(X)
+        w -= learning_rate * dw
+        return w
 
 
 if __name__ == '__main__':
     # Generate random data
     n_feats = 5
-    n_obs = 100
-    X = np.random.randint(0, 30, size=[n_obs, n_feats])
-    y = X[:, 0].reshape(n_obs,1) + np.random.randint(0, 30, size=[n_obs, 1])
+    n_obs = 100000
+    X = np.random.randint(0, 100, size=[n_obs, n_feats])
+    y = X[:, 0].reshape(n_obs, 1) + np.random.randint(0, 30, size=[n_obs, 1])
     # Fit model
     model = Regression()
-    model.fit(X, y, method='SGD')
+    model.fit(X, y, method='SGD', batch_size=50, learning_rate=0.0001, epochs=100)
     # Predict
     y_pred = model.predict(X[0, :])
-    print(y_pred)
