@@ -1,15 +1,23 @@
-def myfunc(a=1, b=2):
+import numpy as np
+
+
+class LogisticRegression(object):
+    """
+    Logistic regression model.
     """
 
-    Parameters
-    ----------
-    a :
-    b :
+    def __init__(self, W=None):
+        self.weights = W
+        self.training_loss = None  # Stores training loss after running gradient descent
 
-    Returns
-    -------
+    def fit(self):
+        return None
 
-    """
+    def predict(self):
+        return None
 
-    c = a + b
-    return c
+    def gradient_descent(self):
+        return None
+
+    def gradient_descent_step(self):
+        return None

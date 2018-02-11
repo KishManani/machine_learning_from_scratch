@@ -2,9 +2,9 @@ import numpy as np
 
 
 class LinearRegression(object):
-    '''
+    """
     Linear regression model. Can be fit by either OLS or gradient descent.
-    '''
+    """
 
     def __init__(self, W=None):
         self.weights = W
