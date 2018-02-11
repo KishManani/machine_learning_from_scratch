@@ -2,6 +2,9 @@ import numpy as np
 
 
 class LinearRegression(object):
+    '''
+    Linear regression model. Can be fit by either OLS or gradient descent.
+    '''
 
     def __init__(self, W=None):
         self.weights = W
@@ -13,11 +16,13 @@ class LinearRegression(object):
 
         Parameters
         ----------
-        X : Input data
+        X : np.array
+            Input data
 
         Returns
         -------
-        Array of predictions from trained linear regression model
+        np.array
+            Array of predictions from trained linear regression model
 
         """
         X = np.insert(X, 0, values=1, axis=1)  # Add constant 1 to start of array
@@ -32,12 +37,18 @@ class LinearRegression(object):
 
         Parameters
         ----------
-        X : Training data
-        y : Target values
-        method : 'OLS' for ordinary least squares solution, 'SGD' for batch gradient descent
-        epochs : Number of epochs to run gradient descent
-        learning_rate : Learning rate for gradient descent
-        batch_size : Batch size for batch gradient descent
+        X : np.array
+            Training data
+        y : np.array
+            Target values
+        method : str
+            'OLS' for ordinary least squares solution, 'SGD' for batch gradient descent
+        epochs : int
+            Number of epochs to run gradient descent
+        learning_rate : float
+            Learning rate for gradient descent
+        batch_size : int
+            Batch size for batch gradient descent
 
         Returns
         -------
@@ -64,11 +75,16 @@ class LinearRegression(object):
 
         Parameters
         ----------
-        X : Training data
-        y : Target values
-        epochs : Number of epochs to run gradient descent
-        learning_rate : Learning rate for gradient descent
-        batch_size : Batch size for batch gradient descent
+        X : np.array
+            Training data
+        y : np.array
+            Target values
+        epochs : int
+            Number of epochs to run gradient descent
+        learning_rate : float
+            Learning rate for gradient descent
+        batch_size : int
+            Batch size for batch gradient descent
 
         Returns
         -------
@@ -110,14 +126,19 @@ class LinearRegression(object):
 
         Parameters
         ----------
-        W : Weights
-        X : Training data
-        y : Target values
-        learning_rate : Learning rate for gradient descent
+        W : np.array
+            Weights
+        X : np.array
+            Training data
+        y : np.array
+            Target values
+        learning_rate : float
+            Learning rate for gradient descent
 
         Returns
         -------
-        W : Updated weights
+        W : np.array
+            Updated weights
 
         """
         y_pred = np.dot(X, W)
