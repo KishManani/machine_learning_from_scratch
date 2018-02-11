@@ -77,7 +77,7 @@ if __name__ == '__main__':
     y = np.dot(X, W) + np.random.rand(n_obs, 1) * 10
 
     # Fit model
-    model = Regression()
+    model = LinearRegression()
     model.fit(X, y, method='SGD', batch_size=250, learning_rate=0.0001, epochs=100)
 
     # Predict
