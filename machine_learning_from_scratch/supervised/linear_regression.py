@@ -63,13 +63,13 @@ class LinearRegression(object):
             ols_weights = np.dot(np.linalg.inv(np.dot(X.T, X)), np.dot(X.T, y))
             self.weights = ols_weights
         elif method == 'SGD':
-            self.gradient_descent(X, y, epochs=epochs, learning_rate=learning_rate, batch_size=batch_size)
+            self._gradient_descent(X, y, epochs=epochs, learning_rate=learning_rate, batch_size=batch_size)
         else:
             raise ValueError('Method "{0}" was not recognised. Method must be either "OLS" or "SGD".'.format(method))
 
         return None
 
-    def gradient_descent(self, X, y, epochs, learning_rate, batch_size):
+    def _gradient_descent(self, X, y, epochs, learning_rate, batch_size):
         """
         Optimises weights using batch gradient descent
 
@@ -105,9 +105,9 @@ class LinearRegression(object):
             y = y[shuffled_ix, :]
 
             for batch_ix in np.arange(0, X.shape[0], batch_size):
-                W = self.gradient_descent_step(W, X[batch_ix:batch_ix + batch_size],
+                W = self._gradient_descent_step(W, X[batch_ix:batch_ix + batch_size],
                                                y[batch_ix:batch_ix + batch_size],
-                                               learning_rate)
+                                                learning_rate)
 
             training_loss = (0.5 / num_samples) * np.dot((y - np.dot(X, W)).T, (y - np.dot(X, W)))
 
@@ -120,26 +120,13 @@ class LinearRegression(object):
         return None
 
     @staticmethod
-    def gradient_descent_step(W, X, y, learning_rate):
-        """
-        Performs a single step of gradient descent
-
-        Parameters
-        ----------
-        W : np.array
-            Weights
-        X : np.array
-            Training data
-        y : np.array
-            Target values
-        learning_rate : float
-            Learning rate for gradient descent
+    def _gradient_descent_step(W, X, y, learning_rate):
+        """ Performs a single step of gradient descent
 
         Returns
         -------
         W : np.array
             Updated weights
-
         """
         y_pred = np.dot(X, W)
         err = (y - y_pred)
