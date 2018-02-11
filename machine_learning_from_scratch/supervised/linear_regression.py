@@ -60,7 +60,7 @@ class LinearRegression(object):
 
     def gradient_descent(self, X, y, epochs, learning_rate, batch_size):
         """
-        Optimises weights using gradient descent
+        Optimises weights using batch gradient descent
 
         Parameters
         ----------
