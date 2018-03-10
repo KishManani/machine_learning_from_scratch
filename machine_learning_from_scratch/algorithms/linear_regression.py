@@ -6,8 +6,8 @@ class LinearRegression(object):
     Linear regression model. Can be fit by either OLS or gradient descent.
     """
 
-    def __init__(self, W=None):
-        self.weights = W
+    def __init__(self):
+        self.weights = None
         self.training_loss = None  # Stores training loss after running gradient descent
 
     def predict(self, X):
@@ -17,7 +17,7 @@ class LinearRegression(object):
         Parameters
         ----------
         X : np.array
-            Input data
+            Input data where rows are observations and columns are features
 
         Returns
         -------
@@ -38,7 +38,7 @@ class LinearRegression(object):
         Parameters
         ----------
         X : np.array
-            Training data
+            Input data where rows are observations and columns are features
         y : np.array
             Target values
         method : str
@@ -76,7 +76,7 @@ class LinearRegression(object):
         Parameters
         ----------
         X : np.array
-            Training data
+            Input data where rows are observations and columns are features
         y : np.array
             Target values
         epochs : int
@@ -105,13 +105,14 @@ class LinearRegression(object):
             y = y[shuffled_ix, :]
 
             for batch_ix in np.arange(0, X.shape[0], batch_size):
-                W = self._gradient_descent_step(W, X[batch_ix:batch_ix + batch_size],
-                                               y[batch_ix:batch_ix + batch_size],
+                W = self._gradient_descent_step(W,
+                                                X[batch_ix:batch_ix + batch_size],
+                                                y[batch_ix:batch_ix + batch_size],
                                                 learning_rate)
 
-            training_loss = (0.5 / num_samples) * np.dot((y - np.dot(X, W)).T, (y - np.dot(X, W)))
-
             if ix % 10 == 0:
+                y_pred = np.dot(X, W)
+                training_loss = self.mse(y, y_pred)
                 print('epoch {0} : training loss {1}'.format(ix, training_loss))
                 training_loss_epochs.append(training_loss[0])
 
@@ -134,6 +135,11 @@ class LinearRegression(object):
         W -= learning_rate * dW
         return W
 
+    @staticmethod
+    def mse(y, y_pred):
+        assert len(y) == len(y_pred)
+        loss = (0.5 / len(y)) * np.dot((y - y_pred).T, (y - y_pred))
+        return loss
 
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
