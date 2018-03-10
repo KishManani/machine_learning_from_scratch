@@ -108,4 +108,4 @@ venv.bak/
 .idea/
 
 # other
-.DS_store/
+*.DS_store
