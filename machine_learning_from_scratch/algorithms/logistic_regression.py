@@ -15,7 +15,7 @@ class LogisticRegression(object):
 
     def fit(self, X, y, method='SGD', epochs=None, learning_rate=None, batch_size=None):
         """
-        Fit linear regression model given training data and target array
+        Fit logistic regression model given training data and target array
 
         Parameters
         ----------
