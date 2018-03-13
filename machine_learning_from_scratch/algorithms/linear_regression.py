@@ -105,10 +105,8 @@ class LinearRegression(object):
             y = y[shuffled_ix, :]
 
             for batch_ix in np.arange(0, X.shape[0], batch_size):
-                W = self._gradient_descent_step(W,
-                                                X[batch_ix:batch_ix + batch_size],
-                                                y[batch_ix:batch_ix + batch_size],
-                                                learning_rate)
+                dW = self._compute_gradient(W, X[batch_ix:batch_ix + batch_size], y[batch_ix:batch_ix + batch_size])
+                W -= learning_rate * dW
 
             if ix % 10 == 0:
                 y_pred = np.dot(X, W)
@@ -121,19 +119,18 @@ class LinearRegression(object):
         return None
 
     @staticmethod
-    def _gradient_descent_step(W, X, y, learning_rate):
-        """ Performs a single step of gradient descent
+    def _compute_gradient(W, X, y):
+        """ Compute gradient
 
         Returns
         -------
-        W : np.array
-            Updated weights
+        dW : np.array
+            Gradient of weights
         """
         y_pred = np.dot(X, W)
         err = (y - y_pred)
         dW = np.dot(-X.T, err) / len(X)
-        W -= learning_rate * dW
-        return W
+        return dW
 
     @staticmethod
     def mse(y, y_pred):

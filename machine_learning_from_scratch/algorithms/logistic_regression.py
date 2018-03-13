@@ -1,6 +1,9 @@
 import numpy as np
 
 
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
 class LogisticRegression(object):
     """
     Logistic regression model.
@@ -43,7 +46,7 @@ class LogisticRegression(object):
 
     def predict(self, X):
         X = np.insert(X, 0, values=1, axis=1)
-        y_pred = self.sigmoid(np.dot(X, self.weights))
+        y_pred = sigmoid(np.dot(X, self.weights))
         return y_pred
 
     def _gradient_descent(self, X, y, epochs, learning_rate, batch_size):
@@ -61,36 +64,27 @@ class LogisticRegression(object):
             y = y[shuffled_ix, :]
 
             for batch_ix in np.arange(0, X.shape[0], batch_size):
-                W = self._gradient_descent_step(W,
-                                                X[batch_ix:batch_ix + batch_size],
-                                                y[batch_ix:batch_ix + batch_size],
-                                                learning_rate)
-
-            y_pred = self.sigmoid(np.dot(X, W))
-            training_loss = self.logloss(y, y_pred)
+                dW = self._compute_gradient(W, X[batch_ix:batch_ix + batch_size], y[batch_ix:batch_ix + batch_size])
+                W -= learning_rate * dW
 
             if ix % 10 == 0:
+                y_pred = sigmoid(np.dot(X, W))
+                training_loss = self.logloss(y, y_pred)
                 print('epoch {0} : training loss {1}'.format(ix, training_loss))
-                training_loss_epochs.append(training_loss[0])
+                training_loss_epochs.append(training_loss)
 
         self.weights = W
         self.training_loss = training_loss_epochs
         return None
 
-
-        return None
-
-    def _gradient_descent_step(self):
-        return None
-
     @staticmethod
-    def sigmoid(x):
-        return 1/(1+np.exp(x))
+    def _compute_gradient(W, X, y):
+        y_pred = sigmoid(np.dot(X, W))
+        return np.dot(X.T, (y_pred - y)) / len(X)
 
     @staticmethod
     def logloss(y, y_pred):
-        loss = 1
-        return loss
+        return np.sum((-y*np.log(y_pred) - (1-y)*np.log(1-y_pred)))/len(y)
 
 if __name__ == '__main__':
     from sklearn import datasets
