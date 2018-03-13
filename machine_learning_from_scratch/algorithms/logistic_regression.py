@@ -86,6 +86,7 @@ class LogisticRegression(object):
     def logloss(y, y_pred):
         return np.sum((-y*np.log(y_pred) - (1-y)*np.log(1-y_pred)))/len(y)
 
+
 if __name__ == '__main__':
     from sklearn import datasets
     X, y = datasets.make_classification(n_samples=1000, n_features=5,
