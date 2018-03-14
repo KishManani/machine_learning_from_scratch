@@ -59,13 +59,13 @@ def compute_distances(X, centroids):
 
 
 if __name__ == '__main__':
-    import matplotlib.pyplot as plt
+    # import matplotlib.pyplot as plt
     from sklearn.datasets import make_blobs
 
     X, y = make_blobs(centers=2)
     clusters, centroids = kmeans(X, k=2, num_iters=10)
 
     # Plot
-    plt.scatter(X[:, 0], X[:, 1], c=clusters, alpha=0.5)
-    plt.scatter(centroids[:, 0], centroids[:, 1], marker='*', s=100, c=np.arange(0, centroids.shape[0]))
-    plt.show()
+    # plt.scatter(X[:, 0], X[:, 1], c=clusters, alpha=0.5)
+    # plt.scatter(centroids[:, 0], centroids[:, 1], marker='*', s=100, c=np.arange(0, centroids.shape[0]))
+    # plt.show()
