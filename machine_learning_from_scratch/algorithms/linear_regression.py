@@ -60,7 +60,7 @@ class LinearRegression(object):
         X = np.insert(X, 0, values=1, axis=1)
 
         if method == 'OLS':
-            ols_weights = np.dot(np.linalg.inv(np.dot(X.T, X)), np.dot(X.T, y))
+            ols_weights = np.dot(np.linalg.pinv(np.dot(X.T, X)), np.dot(X.T, y))
             self.weights = ols_weights
         elif method == 'SGD':
             self._gradient_descent(X, y, epochs=epochs, learning_rate=learning_rate, batch_size=batch_size)
